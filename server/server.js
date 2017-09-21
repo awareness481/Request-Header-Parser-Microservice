@@ -1,16 +1,19 @@
 const express = require('express');
-const requestIp = require('request-ip');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(requestIp.mw())
-
 
 app.get('/', (req, res) => {
   console.log(req.headers);
-  var ip = req.clientIp;
-  console.log(ip)
+  console.log(req.clientAddress);
+
+  res.send({
+      ip: req.clientAddress,
+      lang: req.get['accept-language'],
+      OS: req.get['user-agent']
+    }
+  );
 });
 
 app.listen(port, () => {
