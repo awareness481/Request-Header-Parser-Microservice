@@ -4,14 +4,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-app.get('/', (req, res) => {
-  console.log(req.headers);
-  console.log(req.clientAddress);
 
+app.get('/', (req, res) => { 
+  let ip = req.header('x-forwarded-for');
+  const index = ip.indexOf(',');
+  ip = ip.substr(0, index);
+  
   res.send({
-      ip: req.clientAddress,
-      lang: req.get['accept-language'],
-      OS: req.get['user-agent']
+      ip,
+      lang: req.header('accept-language'),
+      OS: req.header('user-agent')
     }
   );
 });
